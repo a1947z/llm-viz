@@ -11,10 +11,10 @@ import { Header } from '@/src/homepage/Header';
 
 export default function Page() {
     return <>
-        <Header title="LLM Visualization">
-            <InfoButton />
+        <Header title="大模型内部是什么样子？" > 
+            {/* <InfoButton /> */}
         </Header>
         <LayerView />
-        <div id="portal-container"></div>
+        {/* <div id="portal-container"></div> */}
     </>;
 }
