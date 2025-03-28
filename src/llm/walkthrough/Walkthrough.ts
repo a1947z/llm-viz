@@ -87,21 +87,21 @@ export function initWalkthrough() {
             groupId: PhaseGroup.Intro,
             title: 'Introduction',
             phases: [
-                { id: Phase.Intro_Intro, title: '整体结构（以NANP-GPT为例）' },
-                { id: Phase.Intro_Prelim, title: '输入【How to predict】这句话，形成【令牌(Token)】' },
+                { id: Phase.Intro_Intro, title: '整体流程输入和输出' },
+                { id: Phase.Intro_Prelim, title: '关于推理和minGPT的说明' },
             ],
         }, {
             groupId: PhaseGroup.Detailed_Input,
             title: 'Detailed',
             phases: [
                 {id: Phase.Input_Detail_Embedding, title: 'Embedding 嵌入层：把文字变数字 '},
-                {id: Phase.Input_Detail_LayerNorm, title: 'Layer Norm 层归一化：让数据更规整 ' },
-                { id: Phase.Input_Detail_SelfAttention, title: 'Self Attention 自注意力：找重要的部分 ' },
-                { id: Phase.Input_Detail_Projection, title: 'Projection 投影层：给数字变样子 ' },
-                { id: Phase.Input_Detail_Mlp, title: 'MLP 多层感知机：将数字加技能点，更容易发现更深层次的特征和规律' },
-                { id: Phase.Input_Detail_Transformer, title: 'Transformer 变换器：整理数字顺序 ' },
-                { id: Phase.Input_Detail_Softmax, title: 'Softmax 激活函数：计算该怎么吐出下一个词 ' },
-                { id: Phase.Input_Detail_Output, title: 'Output 输出层：给出最后答案 ' }
+                {id: Phase.Input_Detail_LayerNorm, title: 'Layer Norm 层归一化' },
+                { id: Phase.Input_Detail_SelfAttention, title: 'Self Attention 自注意力机制'},
+                { id: Phase.Input_Detail_Projection, title: 'Projection 投影层 ' },
+                { id: Phase.Input_Detail_Mlp, title: 'MLP 多层感知机' },
+                { id: Phase.Input_Detail_Transformer, title: 'Transformer 变换器 ' },
+                { id: Phase.Input_Detail_Softmax, title: 'Softmax 激活函数 ' },
+                { id: Phase.Input_Detail_Output, title: 'Output 输出层：给出下一个词的可能性 ' }
             ],
         }] as IPhaseGroup[],
     };

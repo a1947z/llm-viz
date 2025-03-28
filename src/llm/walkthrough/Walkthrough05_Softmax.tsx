@@ -13,46 +13,27 @@ export function walkthrough05_Softmax(args: IWalkthroughArgs) {
 
     let c0 = commentary(wt, null, 0)`
 
-The softmax operation is used as part of self-attention, as seen in the previous section, and it
-will also appear at the very end of the model.
+Softmax 操作是自注意力（self-attention）的一部分，正如上一部分所见，它还会出现在模型的最后阶段。
 
-Its goal is to take a vector and normalize its values so that they sum to 1.0. However, it's not as
-simple as dividing by the sum. Instead, each input value is first exponentiated.
+它的目标是将一个向量的值归一化，使它们的总和为 1.0。然而，这并不像简单地除以总和那么简单。相反，每个输入值首先会被取指数：
 
   a = exp(x_1)
 
-This has the effect of making all values positive. Once we have a vector of our exponentiated
-values, we can then divide each value by the sum of all the values. This will ensure that the sum
-of the values is 1.0. Since all the exponentiated values are positive, we know that the resulting
-values will be between 0.0 and 1.0, which provides a probability distribution over the original values.
+这会使所有值变为正数。一旦我们得到了一个指数化值的向量，我们就可以将每个值除以所有值的总和。这将确保这些值的总和为 1.0。由于所有的指数化值都是正数，我们知道结果值将介于 0.0 和 1.0 之间，从而为原始值提供了一个概率分布。
 
-That's it for softmax: simply exponentiate the values and then divide by the sum.
+这就是 softmax 的核心：简单地对值取指数，然后除以总和。
 
-However, there's a slight complication. If any of the input values are quite large, then the
-exponentiated values will be very large. We'll end up dividing a large number by a very large number,
-and this can cause issues with floating-point arithmetic.
+然而，这里有一个小问题。如果输入值中有一些非常大，那么指数化后的值也会非常大。我们最终会将一个大数除以一个非常大的数，这可能会导致浮点运算问题。
 
-One useful property of the softmax operation is that if we add a constant to all the input values,
-the result will be the same. So we can find the largest value in the input vector and subtract it
-from all the values. This ensures that the largest value is 0.0, and the softmax remains numerically
-stable.
+Softmax 操作的一个有用性质是，如果我们对所有输入值加上一个常数，结果将保持不变。因此，我们可以找到输入向量中的最大值，并从所有值中减去它。这确保了最大值为 0.0，同时保持 softmax 的数值稳定性。
 
-Let's take a look at the softmax operation in the context of the self-attention layer. Our input
-vector for each softmax operation is a row of the self-attention matrix (but only up to the diagonal).
+现在让我们看看 softmax 操作在自注意力层中的应用。对于每次 softmax 操作的输入向量，是自注意力矩阵的一行（但仅限于对角线之前的部分）。
 
-Like with layer normalization, we have an intermediate step where we store some aggregation values
-to keep the process efficient.
+与层归一化（layer normalization）类似，我们有一个中间步骤，用于存储一些聚合值以提高过程效率。
 
-For each row, we store the max value in the row and the sum of the shifted & exponentiated values.
-Then, to produce the corresponding output row, we can perform a small set of operations: subtract the
-max, exponentiate, and divide by the sum.
+对于每一行，我们存储该行的最大值以及偏移后指数化值的总和。然后，为了生成对应的输出行，我们可以执行一小组操作：减去最大值、取指数、然后除以总和。
 
-What's with the name "softmax"? The "hard" version of this operation, called argmax, simply finds
-the maximum value, sets it to 1.0, and assigns 0.0 to all other values. In contrast, the softmax
-operation serves as a "softer" version of that. Due to the exponentiation involved in softmax, the
-largest value is emphasized and pushed towards 1.0, while still maintaining a probability distribution
-over all input values. This allows for a more nuanced representation that captures not only the most
-likely option but also the relative likelihood of other options.
+为什么叫 "softmax" 呢？这一操作的“硬”版本称为 argmax，它仅找到最大值，将其设置为 1.0，并将所有其他值设置为 0.0。相比之下，softmax 操作是这一过程的“软”版本。由于 softmax 中涉及指数化，最大的值会被强调并趋近于 1.0，同时仍然保持对所有输入值的概率分布。这允许更细腻的表示，不仅捕获最可能的选项，还捕获其他选项的相对可能性。
 `;
 
 }

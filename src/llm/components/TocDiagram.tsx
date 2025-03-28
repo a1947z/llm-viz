@@ -130,7 +130,7 @@ export const TocDiagram: React.FC<{
 
     entryGroups.push({ groupName: '简介', entries: [] });
     makeEntry(Phase.Intro_Intro, '输入和输出', []);
-    makeEntry(Phase.Intro_Prelim, 'NANO-GPT是模型的雏形', []);
+    makeEntry(Phase.Intro_Prelim, '关于极小模型MinGPT的说明', []);
 
     entryGroups.push({ groupName: '组件', entries: [] });
     makeEntry(Phase.Input_Detail_Embedding, 'Embedding嵌入层', ['tokEmbed', 'posEmbed'], true);

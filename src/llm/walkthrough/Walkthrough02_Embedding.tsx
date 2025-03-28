@@ -21,11 +21,12 @@ export function walkthrough02_Embedding(args: IWalkthroughArgs) {
     wt.dimHighlightBlocks = [layout.idxObj, layout.tokEmbedObj, layout.posEmbedObj, layout.residual0];
 
     commentary(wt)`
-We saw previously how the tokens are mapped to a sequence of integers using a simple lookup table.
-These integers, the ${c_blockRef('_token indices_', state.layout.idxObj, DimStyle.TokenIdx)}, are the first and only time we see integers in the model.
-From here on out, we're using floats (decimal numbers).
+我们之前已经看到，如何通过一个简单的查找表将 tokens 映射为一系列整数。
+这些整数，即 ${c_blockRef('_token indices_', state.layout.idxObj, DimStyle.TokenIdx)}，是我们在模型中唯一一次看到整数。
+从这里开始，我们将使用浮点数（小数）。
 
-Let's take a look at how the 4th token (index 3) is used to generate the 4th column vector of our ${c_blockRef('_input embedding_', state.layout.residual0)}.`;
+让我们来看看第 4 个 token（索引为 3）是如何用于生成 ${c_blockRef('_input embedding_', state.layout.residual0)} 的第 4 列向量的。
+`;
     breakAfter();
 
     let t_moveCamera = afterTime(null, 1.0);
@@ -34,10 +35,10 @@ Let's take a look at how the 4th token (index 3) is used to generate the 4th col
     breakAfter();
 
     commentary(wt)`
-We use the token index (in this case ${c_str('B', DimStyle.Token)} = ${c_dimRef('1', DimStyle.TokenIdx)}) to select the 2nd column of the ${c_blockRef('_token embedding matrix_', state.layout.tokEmbedObj)} on the left.
-Note we're using 0-based indexing here, so the first column is at index 0.
+我们使用 token 索引（在本例中 ${c_str('B', DimStyle.Token)} = ${c_dimRef('1', DimStyle.TokenIdx)}) 来选择左侧 ${c_blockRef('_token embedding matrix_', state.layout.tokEmbedObj)} 的第 2 列。
+请注意，我们这里使用的是从 0 开始的索引，因此第一列的索引为 0。
 
-This produces a column vector of size ${c_dimRef('_C_ = 48', DimStyle.C)}, which we describe as the token embedding.
+这会生成一个大小为 ${c_dimRef('_C_ = 48', DimStyle.C)} 的列向量，我们称之为 令牌嵌入层（token embedding）。
     `;
     breakAfter();
 
@@ -47,9 +48,9 @@ This produces a column vector of size ${c_dimRef('_C_ = 48', DimStyle.C)}, which
     breakAfter();
 
     commentary(wt)`
-And since we're looking at our token ${c_str('B', DimStyle.Token)} in the 4th _position_ (t = ${c_dimRef('3', DimStyle.T)}), we'll take the 4th column of the ${c_blockRef('_position embedding matrix_', state.layout.posEmbedObj)}.
+由于我们正在查看第 4 个 _位置_（t = ${c_dimRef('3', DimStyle.T)}) 的 token ${c_str('B', DimStyle.Token)}，我们将从 ${c_blockRef('_position embedding matrix_', state.layout.posEmbedObj)} 中取第 4 列。
 
-This also produces a column vector of size ${c_dimRef('_C_ = 48', DimStyle.C)}, which we describe as the position embedding.
+这同样会生成一个大小为 ${c_dimRef('_C_ = 48', DimStyle.C)} 的列向量，我们称之为 位置嵌入层（position embedding）。
     `;
     breakAfter();
 
@@ -58,9 +59,15 @@ This also produces a column vector of size ${c_dimRef('_C_ = 48', DimStyle.C)}, 
     breakAfter();
 
     commentary(wt)`
-Note that both of these position and token embeddings are learned during training (indicated by their blue color).
+请注意，这些位置嵌入层（position embedding） 和 令牌嵌入层（token embedding） 都是在训练过程中学习到的（通过它们的蓝色表示）
 
-Now that we have these two column vectors, we simply add them together to produce another column vector of size ${c_dimRef('_C_ = 48', DimStyle.C)}.
+_（注：令牌嵌入层（token embedding）
+它就像一个神奇的字典翻译官。当你把小说里的每个字、每个词（这些就是 “token”）拿出来时，这个翻译官会把它们转换成计算机能够理解的数字向量。每个词都有属于自己独一无二的 “数字名片”，这样计算机就能通过这些 “名片” 来认识这些词啦。例如，“苹果” 这个词，在 “token embedding” 的转换下，就变成了一串特定的数字组合，计算机看到这串数字，就知道说的是 “苹果”。它的主要任务就是让计算机明白每个词的语义。
+位置嵌入层（position embedding）
+它是一个超级定位器。在小说里，每个词所处的位置是非常重要的，不同的位置会让句子的意思大不相同。“position embedding” 的作用就是给每个词的位置也生成一个独特的数字向量。比如，“我吃饭” 和 “饭吃我”，虽然词一样，但因为位置不同，意思完全不同。“position embedding” 会给 “我”“吃”“饭” 这几个词的位置分别加上特殊的标记，告诉计算机每个词在句子里的准确位置，这样计算机就能理解句子的正确顺序和含义了。他还能算出一些近义词的关系，就像中文中的对仗，比如“国王”与“皇后”，以及“丈夫”和“妻子”，这两组词在位置嵌入层（position embedding）不同位置上，但是他们的“距离”是差不多的。)_
+
+
+现在我们有了这两个列向量，我们只需将它们相加，就可以生成另一个大小为 ${c_dimRef('_C_ = 48', DimStyle.C)} 的列向量。
 `;
 
     breakAfter();
@@ -76,7 +83,7 @@ Now that we have these two column vectors, we simply add them together to produc
     breakAfter();
 
     commentary(wt)`
-We now run this same process for all of the tokens in the input sequence, creating a set of vectors which incorporate both the token values and their positions.
+我们现在对输入序列中的所有 tokens 运行相同的过程，生成一组同时包含 token 值和它们位置的向量。
 
 `;
 
@@ -87,15 +94,14 @@ We now run this same process for all of the tokens in the input sequence, creati
     breakAfter();
 
     commentary(wt)`
-Feel free to hover over individual cells on the ${c_blockRef('_input embedding_', state.layout.residual0)} matrix to see the computations and their sources.
+您可以随意将鼠标悬停在 ${c_blockRef('_input embedding_', state.layout.residual0)} 矩阵的单元格上，查看计算过程及其来源。
 
-We see that running this process for all the tokens in the input sequence produces a matrix of size ${c_dimRef('_T_', DimStyle.T)} x ${c_dimRef('_C_', DimStyle.C)}.
-The ${c_dimRef('_T_', DimStyle.T)} stands for ${c_dimRef('_time_', DimStyle.T)}, i.e., you can think of tokens later in the sequence as later in time.
-The ${c_dimRef('_C_', DimStyle.C)} stands for ${c_dimRef('_channel_', DimStyle.C)}, but is also referred to as "feature" or "dimension" or "embedding size". This length, ${c_dimRef('_C_', DimStyle.C)},
-is one of the several "hyperparameters" of the model, and is chosen by the designer to in a tradeoff between model size and performance.
+我们看到，对输入序列中的所有 tokens 运行此过程会生成一个大小为 ${c_dimRef('_T_', DimStyle.T)} x ${c_dimRef('_C_', DimStyle.C)} 的矩阵。
+${c_dimRef('_T_', DimStyle.T)} 代表 ${c_dimRef('_time_', DimStyle.T)}，即您可以将序列中后面的 tokens 视为时间上的后续。
+${c_dimRef('_C_', DimStyle.C)} 代表 ${c_dimRef('_channel_', DimStyle.C)}，但也被称为“特征”或“维度”或“embedding 大小”。这个长度 ${c_dimRef('_C_', DimStyle.C)} 是模型的几个“超参数”之一，由设计者在模型大小和性能之间权衡选择。
 
-This matrix, which we'll refer to as the ${c_blockRef('_input embedding_', state.layout.residual0)} is now ready to be passed down through the model.
-This collection of ${c_dimRef('T', DimStyle.T)} columns each of length ${c_dimRef('C', DimStyle.C)} will become a familiar sight throughout this guide.
+这个矩阵，我们称之为 ${c_blockRef('_input embedding_', state.layout.residual0)}，现在已经准备好传递到模型中。
+这组包含 ${c_dimRef('T', DimStyle.T)} 列、每列长度为 ${c_dimRef('C', DimStyle.C)} 的向量将在本指南中频繁出现。
 `;
 
     cleanup(t9_cleanupInstant, [t3_moveTokenEmbed, t5_movePosEmbed, t6_plusSymAnim, t7_addAnim, t8_placeAnim]);

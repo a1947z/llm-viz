@@ -19,11 +19,12 @@ export function walkthrough06_Projection(args: IWalkthroughArgs) {
 
     commentary(wt, null, 0)`
 
-After the self-attention process, we have outputs from each of the heads. These outputs are the
-appropriately mixed V vectors, influenced by the Q and K vectors.
+在自注意力（self-attention）过程之后，我们得到了每个头（head）的输出。这些输出是
+适当混合的 V 向量，受 Q 和 K 向量的影响。
 
-To combine the ${c_blockRef('output vectors', outBlocks)} from each head, we simply stack them on top of each other. So, for time
-${c_dimRef('t = 4', DimStyle.T)}, we go from 3 vectors of length ${c_dimRef('A = 16', DimStyle.A)} to 1 vector of length ${c_dimRef('C = 48', DimStyle.C)}.`;
+为了将来自每个头的 ${c_blockRef('输出向量', outBlocks)} 组合在一起，我们只需将它们堆叠在一起即可。因此，对于时间步
+${c_dimRef('t = 4', DimStyle.T)}，我们从 3 个长度为 ${c_dimRef('A = 16', DimStyle.A)} 的向量变为 1 个长度为 ${c_dimRef('C = 48', DimStyle.C)} 的向量。
+`;
 
     breakAfter();
 
@@ -35,11 +36,11 @@ ${c_dimRef('t = 4', DimStyle.T)}, we go from 3 vectors of length ${c_dimRef('A =
 
     commentary(wt)`
 
-It's worth noting that in GPT, the length of the vectors within a head (${c_dimRef('A = 16', DimStyle.A)}) is equal to ${c_dimRef('C', DimStyle.C)} / num_heads.
-This ensures that when we stack them back together, we get the original length, ${c_dimRef('C', DimStyle.C)}.
+值得注意的是，在 GPT 中，每个头内向量的长度（${c_dimRef('A = 16', DimStyle.A)}）等于 ${c_dimRef('C', DimStyle.C)} / num_heads。
+这确保了当我们将它们重新堆叠在一起时，我们会得到原始长度 ${c_dimRef('C', DimStyle.C)}。
 
-From here, we perform the projection to get the output of the layer. This is a simple matrix-vector
-multiplication on a per-column basis, with a bias added.`;
+从这里开始，我们执行投影操作以获得这一层的输出。这是一个简单的矩阵-向量乘法，按列进行，并添加一个偏置。
+`;
 
     breakAfter();
 
@@ -49,9 +50,8 @@ multiplication on a per-column basis, with a bias added.`;
 
     commentary(wt)`
 
-Now we have the output of the self-attention layer. Instead of passing this output directly to the
-next phase, we add it element-wise to the input embedding. This process, denoted by the green
-vertical arrow, is called the _residual connection_ or _residual pathway_.
+现在我们得到了自注意力层的输出。我们没有直接将此输出传递到下一阶段，而是将其逐元素地加到输入嵌入上。
+这个过程由绿色的垂直箭头表示，称为 _残差连接_（residual connection）或 _残差路径_（residual pathway）。
 `;
 
     breakAfter();
@@ -65,11 +65,9 @@ vertical arrow, is called the _residual connection_ or _residual pathway_.
 
     commentary(wt)`
 
-Like layer normalization, the residual pathway is important for enabling effective learning in deep
-neural networks.
+与层归一化（layer normalization）类似，残差路径对于在深度神经网络中实现有效学习非常重要。
 
-Now with the result of self-attention in hand, we can pass it onto the next section of the transformer:
-the feed-forward network.
+现在，手中有了自注意力的结果，我们可以将其传递到 Transformer 的下一部分：前馈网络（feed-forward network）。
 `;
 
     breakAfter();

@@ -1,147 +1,137 @@
- -- Introduction --
+-- 简介 --
 
-Welcome to the walkthrough of the structure & operation of the GPT large language model (LLM) model.
-This architecture is of interest as it's what powers OpenAI's GPT series of models: GPT-2 and GPT-3, including ChatGPT.
+欢迎来到 GPT 大型语言模型（LLM）结构和操作的演示。
+这种架构非常有趣，因为它是 OpenAI 的 GPT 系列模型（GPT-2 和 GPT-3，包括 ChatGPT）的核心。
 
-Here where focusing on _inference_. I.e. what happens when ChatGPT responds with some text. The other side of ML,
-_training_ is not covered here.
+这里我们专注于 _推理_（inference）。也就是说，当 ChatGPT生成一些文本时会发生什么。而机器学习的另一部分，
+_训练_（training），在这里不作讨论。
 
-The model we'll explore here is aptly named _nano_-gpt, several orders of magnitude smaller than serious LLMs, but
-a lot easier to digest.
+我们将探索的模型被恰当地命名为 _nano_-gpt，比真正的大型语言模型小了好几个数量级，但更容易理解。
 
-It's goal, being so small, is a simple one: take a sequence of six letters, using 'A', 'B', or 'C' such as "CABACA", and
-sort them in ascending order, i.e. "AAABCC". There are easier ways to be sure, but it's interesting enough.
+它的目标非常简单：接收一个由六个字母组成的序列，使用 'A'、'B' 或 'C'，例如 "CABACA"，并将它们按升序排序，即 "AAABCC"。
+当然，有更简单的方法可以实现这一点，但这个过程足够有趣。
 
-We call each of these letters _tokens_, and is this model's vocabulary. I.e. it only has 3. For larger models, these tokens
-could be all the letters of the alphabet, or all words in the English language.
+我们将这些字母称为 _tokens_，它们构成了这个模型的词汇表（vocabulary）。也就是说，它只有 3 个 token。
+对于更大的模型，这些 token 可能是整个字母表，或者是英语中的所有单词。
 
-Each token is assigned a number, and our 'A', 'B', and 'C' naturally map to 0, 1, & 2. Now they're ready to be passed into
-the model.
+每个 token 都被分配了一个数字，而我们的 'A'、'B' 和 'C' 自然映射到 0、1 和 2。现在它们已经准备好传递到模型中。
 
-Now that we have a set of numbers in a sequence, (2, 1, 0, 1, 1, 2), we can run the model.
+现在我们有了一组按顺序排列的数字（2, 1, 0, 1, 1, 2），我们可以运行模型了。
 
-Each of the token numbers are transformed into a vector containing 48 numbers, and are then ready to pass through the
-steps of the model.
+每个 token 数字都会被转换为一个包含 48 个数字的向量，然后准备通过模型的各个步骤。
 
-We go through a series of transformers, before reaching the bottom where we end up with ... more numbers.
+我们会经过一系列 Transformer，最终到达底部，得到……更多的数字。
 
-So what's the output? A prediction of the next element in the sequence! So at the 6th entry, we get probabilities that
-the answer is going to be 'A', 'B', or 'C'. Clearly it's 'A' since that's the smallest letter in our original sequence.
-We then feed that answer into the 7th slot, rince & repeat.
+那么输出是什么？是序列中下一个元素的预测！因此，在第 6 个位置，我们得到的概率是答案将是 'A'、'B' 或 'C'。
+显然是 'A'，因为这是原始序列中最小的字母。然后我们将这个答案反馈到第 7 个位置，重复这个过程。
 
+-- 输入 --
+“每个 token（单词/字符）都用一个数字表示。” [依次高亮显示前几个 token 及其数字]
+“我们可以将字符映射到数字，或者将单词映射到数字，或者其他任何东西。” [显示字符映射，显示 GPT-token 映射；高亮映射]
+“在我们的例子中，我们的词汇表中只有 3 个‘单词’：‘0’、‘1’ 和 ‘2’。” [高亮显示这 3 个不同的单词]（脚注关于 Andrej Karpathy 的演示示例）
+“这些自然映射到整数 0、1 和 2。” [高亮显示这 3 个不同的整数]
+“这个小模型的任务是将这些数字按升序排序。让我们看看它是如何工作的！” [可视化排序；显示模型]
 
- -- Input --
- "Each token, or word/character, is represented by a number." [sequentially highlight the first few tokens & their numbers]
- "We could map characters to numbers, or words to numbers, or anything else." [show a char-map, show a gpt-token map; highlight the mappings]
- "In our case, we only have 3 'words' in our vocabulary: '0', '1', and '2'." [highlight the 3 distinct words] (footnote about Andrej Karpathy's demo example)
- "And these naturally map to the integers 0, 1, and 2." [highlight the 3 distinct integers]
- "This tiny model here sorts those numbers into ascending order. Let's see how it works!" [visualize the sort; show the model]
+“我们将序列放入一个数组中，忽略其他部分。” [高亮显示这 6 个整数]
+“我们将 6 个 token/整数的序列转换为 48 元素的向量，每个对应一个‘时间’步。” [快速操作阶段；高亮显示 48 元素向量]
 
- "So we put our sequence into an array, ignoring the rest." [highlight the 6 integers]
- "We convert our sequence of 6 tokens/integers to 48 element vectors. one at each 'time' step." [quick op phase; highlight the 48 element vectors]
+“这些向量现在通过模型的各个阶段，经过一系列 Transformer。” [高亮显示 Transformer，快速浏览它们]
 
- "These vectors now pass through the stages of the model, going through a series of transformers." [highlight the transformers, quickly step through them]
+-- 输出 --
+“输出是什么？是序列中下一个 token 的加权预测！” [高亮显示第 6 个元素]
+“一旦我们选择了下一个 token，我们可以将其放入第 7 个位置，并重复。” [将输出可视化滑动到顶部；将第 7 个元素放到顶部；重复直到结束]
 
+“现在我们得到了预测结果。一个正确排序的数字列表。” [高亮显示源 6 个数字和输出 6 个数字]
 
- -- Output --
- "And what's the output? A weighted prediction of the next token in the sequence!" [highlight the 6th element]
- "And once we've picked the next token, we can place that in the 7th position, and repeat." [slide the output viz to the top; plonk the 7th element at the top; repeat until the end]
+“显然，这是一种非常复杂的排序 6 个数字的方法！但它的结构和功能与 GPT-2 完全相同。嗯，除了规模上的小问题……”
 
- "And now we have our prediction. A list of correctly sorted numbers." [highlight the source 6 numbers, and output 6 numbers]
+-- 输入细节 --
 
- "Clearly this is a very convoluted way to sort 6 numbers! But it's structure and function are identical to that of GPT-2. Well, besides that small matter of scale..."
+“现在让我们更详细地看看模型。” [高亮显示输入]
 
- -- Input detail --
+“模型由权重（Weights）组成，具有输入、Transformer 和输出的结构，这里我们还显示了所有的中间结果。” [高亮显示权重、Transformer 和中间结果]
+“请注意，在任何时候，实际上只需要一小部分中间结果，但我们在这里为了清晰起见显示了所有结果。” [高亮显示中间结果]
 
- "Now lets look at the model in more detail." [highlight the input]
+“让我们从顶部开始。为了计算每个时间步 T 的向量，我们需要执行几个步骤：” [高亮显示输入]
 
- "The model is composed of Weights, with this structure of inputs, transformers, and outputs, and here we're also showing all the intermediate results." [highlight the weights, transformers, and intermediate results]
- "Note that only a small fraction of the intermediate results are actually required at any one time, but we show them all here for clarity." [highlight the intermediate results]
+“1. 选择 token 嵌入矩阵的第 i 列。” [高亮显示嵌入矩阵的第 i 列]
+“2. 选择位置嵌入矩阵的第 t 列。” [高亮显示位置嵌入矩阵的第 t 列]
+“并将它们相加。现在每个向量都包含了一些关于 token 的信息，以及一些关于它位置的信息，并准备好进入 Transformer。” [高亮显示相加]
 
- "Let's start at the top. To compute the vectors at each time T we do a couple of steps:" [highlight the input]
+-- Transformer 细节 --
 
+“每个 Transformer 由一个‘自注意力’（self-attention）层、一个‘前馈’（feed-forward）层，以及我们称之为‘残差主干’（residual backbone）的部分组成。” [高亮显示自注意力层、前馈层和主干]
 
+-- 层归一化 --
 
- "1. Select the i'th column of the token embedding matrix." [highlight the i'th column of the embedding matrix for a couple of them]
- "2. Select the t'th column of the position embedding matrix." [highlight the t'th column of the position embedding matrix for a few of them]
- "And add them together. Now each vector has some information about the token, and some about it's position, and is ready to enter the transformers." [highlight the addition]
+“在每一层之前，我们都会应用‘层归一化’（layer normalization）。” [高亮显示层归一化部分]
+“分别对每个 T 进行操作：我们计算它的均值和方差。” [高亮显示均值和方差计算]
+“我们对向量进行归一化（减去均值，除以方差）……” [高亮显示归一化]
+“…然后通过这些权重对其进行缩放和平移。” [高亮显示缩放和平移]
+“这看起来似乎是在撤销归一化，但现在我们有了学习到的均值和标准差，这有助于深度网络的学习。”
 
- -- Transformer detail --
+-- 自注意力 --
 
- "Each transformer is made up of a "self-attention" layer, a "feed-forward" layer, connected to what we'll call the "residual backbone"." [highlight the self-attention layer and the feed-forward layer and backbone]
+“现在我们可以应用自注意力层。” [高亮显示自注意力层]
+“自注意力是模型中序列的各部分可以彼此可见的部分。在此之前，每个 T 都可以独立处理。”
 
+“自注意力由多个头（heads）组成。让我们看看其中一个。” [隐藏其他头；垂直展开]
+“从每个输入向量中，我们计算一个查询（query）、键（key）和值（value）向量，每个长度为 A。” [高亮显示查询、键和值]
+“每个时间步 T 的向量是一个矩阵-向量乘法。” [高亮显示矩阵-向量乘法]
+“现在到了自注意力的核心部分。让我们看看其中一个查询向量。” [高亮显示查询向量]
+“它的目的是找到其他时间步 T 的键，它应该关注哪些键。”
+“我们计算查询向量与每个键向量的点积（逐元素相乘并求和），并将其缩放为 1 / sqrt(A)。” [运行点积]
+“结果为它们的匹配程度打分，并将其存储在注意力矩阵中。” [对剩余键运行点积]
+“这里的一个技巧是我们只考虑过去的键。这被称为‘因果注意力’（causal attention）。”
 
- -- Layer normalization --
+“现在我们有了一行分数，我们希望将其转换为总和为 1 的一行数字。我们通过应用 softmax 来完成此操作。”
+“较高的分数将获得更大的比例，而较低的分数将获得较小的比例。”
+“为此，我们对每个分数取指数，然后除以所有这些值的总和。” [高亮显示 softmax]
+“作为一个稳定性技巧，我们在取指数之前从每个分数中减去最大值。这不会改变输出。”
+“现在有了这一行分数，我们可以计算值向量的加权和。” [高亮显示加权和]
+“这给了我们一个新向量，它从其他时间步 T 中提取了它感兴趣的信息，现在可以传递下去了。”
+“我们对每个键运行此过程，为每个时间步 T 生成一组完整的值。” [高亮显示完整值集]
+“然后对其他头运行相同的过程。不同的头会寻找不同的信息，但每个头都可以看到整个输入。” [运行其他头]
 
- "Before each of these layers, we apply "layer normalization"." [highlight the layer normalization section]
- "Working on each T separately: we compute its mean & variance" [highlight the mean & variance computation]
- "We normalize the vector (subtract the mean, divide by the variance)..." [highlight the normalization]
- "...and then scale and shift it by these weights." [highlight the scaling and shifting]
- "This almost seems like we're undoing the normalization, but now we have learned mean & stddev, which helps with learning on deep networks."
+“完成了时间步 T 之间的混合后，我们回到独立处理每个时间步。”
+“从每个头中，我们将值连接成一个单一向量。” [高亮显示连接]
+“GPT 模型通常被设计为使该向量的长度与输入向量相同。” [高亮显示输入向量]
+“在返回到残差主干之前，我们应用另一个矩阵-向量乘法。通常称为投影（projection）。” [执行矩阵-向量乘法]
+“与其他矩阵-向量乘法不同，这里没有偏置。” [注意没有偏置]
 
+“现代深度机器学习网络的另一个常见特性是使用残差连接（residual connections）。”
+“我们没有将 Transformer 的输出直接传递到下一层，而是首先将其添加到输入上。” [高亮显示残差连接]
+“这发生在 Transformer 的每个阶段，被称为残差主干。” [高亮显示残差主干]
 
- -- Self-attention --
+-- 前馈细节 --
 
- "Now we can apply the self-attention layer." [highlight the self-attention layer]
- "Self-attention is the part of the model where parts of the sequence become visible to each other. Up til now, each T could be processed independently."
+“前馈层是一个简单的矩阵-向量乘法，并带有一个偏置。” [高亮显示矩阵-向量乘法]
+“同样，我们对每个时间步 T 独立操作，并将向量扩展为原始大小的 4 倍。” [高亮显示扩展]
+“现在我们应用激活函数。神经网络的关键部分之一，它引入了非线性。”
+“一个常见的选择是 ReLU 函数，它只是输入和 0 的最大值。” [高亮显示 ReLU]
+“然而，GPT 使用了一种不同的激活函数，称为 GELU，它是 ReLU 的平滑近似。” [高亮显示 GELU]
+“激活函数独立地应用于向量的每个元素。” [高亮显示激活函数]
+“现在我们应用另一个矩阵-向量乘法，从 4 * T 缩回到 T。” [高亮显示矩阵-向量乘法]
+“这个结果被添加到残差主干中，现在我们完成了 Transformer！” [高亮显示残差主干]
 
- "Self-attention is made up of several heads. Let's take a look at one." [dim the other heads; expand vertically]
- "From each of the input vectors, we compute a query, key, and value vector, each of length A." [highlight the query, key, and value]
- "Each vector at each T is a matrix-vector multiply" [highlight the matrix-vector multiply]
- "Now comes the core of self-attention. Let's take a look at one of the query vectors." [highlight the query vector]
- "It's purpose is to find keys from other T's that it should pay attention to."
- "We compute the dot product (multiply pair-wise; sum) of the query vector with each key vector and scale it by 1 / sqrt(A)." [run the dot product]
- "The result gives a score for how closely they match, and we store it in the attention matrix." [run the dot product on remaining keys]
- "One trick here is that we only consider the keys from the past. This is called 'causal attention'."
+-- Transformer 总结 --
 
- "Now we have a row of scores we want to turn it into a row of numbers that sum to 1. We do this by applying a softmax."
- "Higher scores will get a larger fraction of that 1, and lower scores will get a smaller fraction."
- "To perform this, we take exponential of each score, and then divide by the sum of all those values" [highlight the softmax]
- "As a stability trick, we subtract the max value from each score before taking the exponential. It doesn't change the output though."
- "Now with this row of scores, we can compute the weighted sum of the value vectors." [highlight the weighted sum]
- "This gives us a new vector, which has pulled information from other T's that it's interested in and is now ready to be passed on."
- "We run this process for each key, producing a full set of values for each T." [highlight the full set of values]
- "And then run the same process for each of the other heads. The different heads will all be looking for different information, but each one can see the entire input." [run the other heads]
+“这就是 Transformer。由自注意力和前馈层组成，通过残差主干连接。” [高亮显示自注意力层、前馈层和残差主干]
+“一个模型由这些 Transformer 的堆栈组成，每个 Transformer 的输出传递到下一个。” [高亮显示 Transformer 堆栈]
 
- "Now that we've done this mixing between T's, we're back to processing each one independently."
- "From each of the heads, we concatenate the values into a single vector." [highlight the concatenation]
- "GPT models are usually structured so that this vector is the same length as the input vector." [highlight the input vector]
- "Before returning to the residual backbone, we apply another matrix-vector multiplication. Typically called a projection." [do the matrix-vector multiply]
- "Unlike other matrix-vector multiplies, this one does not have a bias." [note lack of bias]
+-- 输出 --
 
- "Another common feature of modern deep ML networks is the use of the residual connections."
- "Instead of passing the output of the transformer directly to the next layer, we first add it to the input." [highlight the residual connection]
- "This occurs at each stage of the transformer, and is called the residual backbone." [highlight the residual backbone]
+“最后我们到达了输出部分。首先我们应用与之前相同的层归一化。” [高亮显示层归一化]
+“然后我们对每个向量应用一个矩阵-向量乘法，生成一个词汇表大小的向量。在我们的例子中只有 3！” [高亮显示矩阵-向量乘法]
 
- -- Feed forward detail --
+“每个元素的值表示输入是该 token 的可能性。值越大，可能性越高。” [高亮显示每个元素的值]
+“我们称这些为 logits。”
+“与自注意力中一样，我们应用 softmax 将这些值转换为总和为 1 的概率。” [高亮显示 softmax]
+“因此我们可以查看最高概率，这就是我们对下一个 token 的预测！” [高亮显示最高概率]
+“我们可以选择前几个选项，或者随机选择一个（根据概率加权）以获得一些变化。”
+“我们可以通过添加一个温度参数（temperature）来调整这一点（在 softmax 之前对 logits 进行缩放）。较高的温度使较低概率的值更可能被选中。” [高亮显示温度参数]
+“我们已经计算了输入中所有时间步 T 的值，但我们只关心预测未来的一个 token。” [高亮显示输入中的时间步 T]
+“因此，如果我们输入 6 个 token，我们取第 6 个（而不是第 7 个！）token 的 logit。” [高亮显示第 6 个 token]
+“之后的 logits 是无意义的，而之前的 logits 只是预测输入。” [高亮显示之后和之前的 logits]
 
- "The feed-forward layer is a simple matrix-vector multiply with a bias." [highlight the matrix-vector multiply]
- "Again, we act on each T independently, and expand the vector to 4x it's original size." [highlight the expansion]
- "Now we apply the activation function. One of the key parts of any neural network, it introduces non-linearity."
- "A common choice is the ReLU function, which is just the max of 0 and the input." [highlight the ReLU]
- "However, GPT uses a different activation function called GELU, a smooth approximation to the ReLU." [highlight the GELU]
- "The activation function is applied to each element of the vector independently." [highlight the activation function]
- "Now we apply another matrix-vector multiply, going from 4 * T back to T." [highlight the matrix-vector multiply]
- "This result is added to the residual backbone, and now we're done with the transformer!" [highlight the residual backbone]
-
- -- Transformer summary --
-
- "So that's the transformer. Composed of the self-attention and feed-forward layers, connected via the residual backbone." [highlight the self-attention layer, feed-forward layer, and residual backbone]
- "A model is made up of a stack of these transformers, with each one feeding into the next." [highlight the stack of transformers]
-
- -- Output --
-
- "Finally we get to the output. First we apply the same layer normalization as before." [highlight the layer normalization]
- "Then we apply a matrix-vector multiply on each vector to produce a vector that's the vocab size. A mere 3 in our case!" [highlight the matrix-vector multiply]
-
- "The value of each element gives an indication of how likely it is that the input is that token. Larger ones: more likely." [highlight the value of each element]
- "We call these our set of logits."
- "Like in self-attention, we apply a softmax to turn these into probabilities that sum to 1." [highlight the softmax]
- "So we can look at the hightest probability, and that's our prediction for the next token!" [highlight the highest probability]
- "We can take the top few options, or randomly pick one (weighted by the probabilities) to get some variation."
- "We can adjust this a bit by adding a temperature parameter (multiply the logits prior to softmax). Higher temperatures make the lower probabilities more likely." [highlight the temperature parameter]
- "We've computed values for all T values in the input, but we only care about predicting one token in the future." [highlight the T values in the input]
- "So if we input 6 tokens, we take the logit for the 6th (not 7th!) token." [highlight the 6th token]
- "Logits after are meaningless, and logits before are just predicting the input." [highlight the logits after and before]
-
- "As in the intro, we're ready to select the token, and feed it back into the top to predict the one after" [highlight the token selection and feeding back into the top]
+“正如介绍中所述，我们准备好选择 token，并将其反馈到顶部以预测下一个。” [高亮显示 token 选择并反馈到顶部]

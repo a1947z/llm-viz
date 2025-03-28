@@ -166,7 +166,7 @@ export function walkthroughIntro(args: IWalkthroughArgs) {
     }
 
     breakAfter();
-    commentary(wt)`嵌入层（embedding）随后会通过模型，经过多层神经网络处理，而每一层神经网络，都用称为transformers的结构机型信息处理_（注：transfomer架构是深度学习中，特别用于大语言模型的架构。但在图像生成等模型中，有另外的架构如扩散Difussion模型。如果按照中文，我们可以将它叫做变换器，但是在大语言模型里面，，我们一般不将transfomer进行特定的翻译，一般用transfomer称呼。单层transfomer的结构后面有详细介绍）_，最终到达底部，这样我们的输入变成了大模型猜想的他要输出的语句中可能出现的那个词的概率。`;
+    commentary(wt)`嵌入层（embedding）随后会通过模型，经过多层神经网络处理，而每一层神经网络，都用称为transformers的结构进行信息关联和下一个词的预测_（注：transfomer架构是深度学习中，特别用于大语言模型的架构。但在图像生成等模型中，有另外的架构如扩散Difussion模型。如果按照中文，我们可以将它叫做变换器，但是在大语言模型里面，，我们一般不将transfomer进行特定的翻译，一般用transfomer称呼。单层transfomer的结构后面有详细介绍）_，最终到达底部，这样我们的输入变成了大模型猜想的他要输出的语句中可能出现的那个词的概率。`;
     breakAfter();
 
     {

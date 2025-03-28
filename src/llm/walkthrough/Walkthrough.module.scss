@@ -1,14 +1,14 @@
-
 .tableWrap {
     display: flex;
     align-items: center;
     flex-direction: column;
     margin: 16px 0;
+    font-family: Arial, sans-serif;
 }
-
 
 .table {
     border-collapse: collapse;
+    font-family: Arial, sans-serif;
 }
 
 .table :global(th) {
@@ -17,36 +17,43 @@
     color: #777;
     font-weight: normal;
     font-style: italic;
-
+    font-family: Arial, sans-serif;
 }
 
 .table :global(thead) {
     border-bottom: 1px solid #999;
+    font-family: Arial, sans-serif;
 }
 
 .table :global(td) {
     padding: 2px 8px;
     text-align: center;
+    font-family: Arial, sans-serif;
 }
 
 .table tr th {
     border-right: 1px solid #999;
+    font-family: Arial, sans-serif;
 }
 
 .table tr:first-child th, .table tr:first-child td {
     border-bottom: 1px solid #999;
+    font-family: Arial, sans-serif;
 }
 
 .tokString td {
     color: #3a3;
+    font-family: Arial, sans-serif;
 }
 
 .tokIndex {
     color: #333;
+    font-family: Arial, sans-serif;
 }
 
 .cellInfoCols {
     display: flex;
+    font-family: Arial, sans-serif;
 }
 
 .cellInfoCol {
@@ -56,14 +63,17 @@
     flex-direction: column;
     align-items: center;
     margin: 8px;
+    font-family: Arial, sans-serif;
 }
 
 .cellInfoText {
     margin-left: 8px;
+    font-family: Arial, sans-serif;
 }
 
 .cellArrayHoriz {
     display: flex;
+    font-family: Arial, sans-serif;
 }
 
 .cellRect {
@@ -72,12 +82,14 @@
     justify-content: center;
     width: 30px;
     height: 30px;
+    font-family: Arial, sans-serif;
 }
 
 .cellCircle {
     width: 20px;
     height: 20px;
     border-radius: 50%;
+    font-family: Arial, sans-serif;
 }
 
 .graph {
@@ -89,6 +101,7 @@
     pointer-events: none;
     margin: 8px 0;
     z-index: 0;
+    font-family: Arial, sans-serif;
 }
 
 .graphCol {
@@ -98,6 +111,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: Arial, sans-serif;
 }
 
 .graphBar {
@@ -105,11 +119,13 @@
     left: 4px;
     right: 4px;
     background-color: #f00;
+    font-family: Arial, sans-serif;
 }
 
 .graphBarLabel {
     position: absolute;
-    font-size: 11px;
+    font-size: 9px;
+    font-family: Arial, sans-serif;
 }
 
 .graphBarHit {
@@ -121,6 +137,7 @@
     pointer-events: auto;
     transform: translateY(-50%);
     z-index: 1;
+    font-family: Arial, sans-serif;
 }
 
 .axisZero {
@@ -133,11 +150,13 @@
     height: 1px;
     background-color: #999;
     z-index: -1;
+    font-family: Arial, sans-serif;
 }
 
 .externalLink {
     color: rgb(89, 89, 211);
     text-decoration: none;
+    font-family: Arial, sans-serif;
     &:hover {
         text-decoration: underline;
     }

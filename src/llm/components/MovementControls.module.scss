@@ -7,6 +7,7 @@
     margin: 20px;
     color: black;
     opacity: 0.8;
+    font-family: Arial, sans-serif;
 
     // display: flex;
     // flex-direction: column;
@@ -21,14 +22,17 @@
     color: #5c5c5c;
     filter: drop-shadow(0 0 2px #e4e4e4d2);
     transition: all 0.1s ease;
+    font-family: Arial, sans-serif;
     // background-color: rgba(red, 0.1);
 }
 
 .arrow {
     font-size: 200%;
+    font-family: Arial, sans-serif;
 }
 
 .control:hover {
     color: #000000;
     filter: drop-shadow(0 0 2px #8a8a8a);
+    font-family: Arial, sans-serif;
 }

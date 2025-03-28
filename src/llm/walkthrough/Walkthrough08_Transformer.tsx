@@ -13,17 +13,11 @@ export function walkthrough08_Transformer(args: IWalkthroughArgs) {
 
     let c0 = commentary(wt, null, 0)`
 
-And that's a complete transformer block!
+这就是一个完整的 Transformer 块！
 
-These form the bulk of any GPT model and are repeated a number of times, with the output of one
-block feeding into the next, continuing the residual pathway.
+这些块构成了任何 GPT 模型的主要部分，并被重复多次，一个块的输出会传递到下一个块，继续残差路径（residual pathway）。
 
-As is common in deep learning, it's hard to say exactly what each of these layers is doing, but we
-have some general ideas: the earlier layers tend to focus on learning
-lower-level features and patterns, while the later layers learn to recognize and understand
-higher-level abstractions and relationships. In the context of natural language processing, the
-lower layers might learn grammar, syntax, and simple word associations, while the higher layers
-might capture more complex semantic relationships, discourse structures, and context-dependent meaning.
+正如深度学习中常见的那样，很难确切地说每一层在做什么，但我们有一些通用的理解：较早的层往往专注于学习低级特征和模式，而较晚的层则学习识别和理解高级抽象和关系。在自然语言处理的上下文中，较低的层可能学习语法、句法和简单的词语关联，而较高的层可能捕获更复杂的语义关系、篇章结构和上下文相关的意义。
 
 `;
 
