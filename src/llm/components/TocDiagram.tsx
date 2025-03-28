@@ -128,19 +128,19 @@ export const TocDiagram: React.FC<{
         entryGroups[entryGroups.length - 1].entries.push(entry);
     }
 
-    entryGroups.push({ groupName: 'Intro', entries: [] });
-    makeEntry(Phase.Intro_Intro, 'Introduction', []);
-    makeEntry(Phase.Intro_Prelim, 'Preliminaries', []);
+    entryGroups.push({ groupName: '简介', entries: [] });
+    makeEntry(Phase.Intro_Intro, '输入和输出', []);
+    makeEntry(Phase.Intro_Prelim, 'NANO-GPT是模型的雏形', []);
 
-    entryGroups.push({ groupName: 'Components', entries: [] });
-    makeEntry(Phase.Input_Detail_Embedding, 'Embedding', ['tokEmbed', 'posEmbed'], true);
-    makeEntry(Phase.Input_Detail_LayerNorm, 'Layer Norm', ['ln1', 'ln2', 'lnf']);
-    makeEntry(Phase.Input_Detail_SelfAttention, 'Self Attention', ['selfAttend']);
-    makeEntry(Phase.Input_Detail_Projection, 'Projection', ['selfAttend']);
-    makeEntry(Phase.Input_Detail_Mlp, 'MLP', ['feedForward']);
-    makeEntry(Phase.Input_Detail_Transformer, 'Transformer', ['transformer']);
-    makeEntry(Phase.Input_Detail_Softmax, 'Softmax', ['softmaxOut']);
-    makeEntry(Phase.Input_Detail_Output, 'Output', ['lnf', 'linear', 'softmaxOut'], true);
+    entryGroups.push({ groupName: '组件', entries: [] });
+    makeEntry(Phase.Input_Detail_Embedding, 'Embedding嵌入层', ['tokEmbed', 'posEmbed'], true);
+    makeEntry(Phase.Input_Detail_LayerNorm, 'Layer Norm层归一化', ['ln1', 'ln2', 'lnf']);
+    makeEntry(Phase.Input_Detail_SelfAttention, 'Self Attention自注意力机制', ['selfAttend']);
+    makeEntry(Phase.Input_Detail_Projection, 'Projection投影层', ['selfAttend']);
+    makeEntry(Phase.Input_Detail_Mlp, 'MLP多层感知机', ['feedForward']);
+    makeEntry(Phase.Input_Detail_Transformer, '单层Transformer', ['transformer']);
+    makeEntry(Phase.Input_Detail_Softmax, 'Softmax激活函数', ['softmaxOut']);
+    makeEntry(Phase.Input_Detail_Output, 'Output输出', ['lnf', 'linear', 'softmaxOut'], true);
 
     function calcSizes(el: IEl): void {
         el.padX = el.padX ?? 0;
@@ -571,7 +571,7 @@ export const TocDiagram: React.FC<{
                 {renderTocToDigramLines()}
             </svg>
             <div className={s.toc}>
-                {!titleAbove && <div className={s.tocTitle}>Table of Contents</div>}
+                {!titleAbove && <div className={s.tocTitle}>内容章节</div>}
                 {entryGroups.map((group, i) => {
 
                     return <React.Fragment key={i}>
