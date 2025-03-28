@@ -58,10 +58,10 @@ export function walkthroughIntro(args: IWalkthroughArgs) {
 
     setInitialCamera(state, new Vec3(184.744, 0.000, -636.820), new Vec3(296.000, 16.000, 13.500));
 
-    let c0 = commentary(wt, null, 0)`Welcome to the walkthrough of the GPT large language model! Here we'll explore the model _nano-gpt_, with a mere 85,000 parameters.
+    let c0 = commentary(wt, null, 0)`欢迎来到 GPT 大型语言模型的演示！在这里，我们将探索模型 _nano-gpt_，它仅有 85,000 个参数（所谓的参数，便是权重+偏置的数量）。
 
-Its goal is a simple one: take a sequence of six letters: ${embed(ExampleInputOutput)}
-and sort them in alphabetical order, i.e. to "ABBBCC".`;
+它的目标很简单：接收一个由六个字母组成的序列：${embed(ExampleInputOutput)}
+并将它们按字母顺序排序，即变为 "ABBBCC"。`;
 
     if (c0.t > 0) {
         for (let cube of layout.cubes) {
@@ -96,9 +96,9 @@ and sort them in alphabetical order, i.e. to "ABBBCC".`;
     let tokenStr = c_str('_token_', 0, DimStyle.Token);
     let tokenIdxStr = c_str('_token index_', 0, DimStyle.TokenIdx);
 
-    commentary(wt, t6)`We call each of these letters a ${tokenStr}, and the set of the model's different tokens make up its _vocabulary_:${embed(TokenVocab)}
+    commentary(wt, t6)`我们将这些字母中的每一个称为 ${tokenStr}，而模型的不同 ${tokenStr} 的集合构成了它的 _词汇表_（vocabulary）：${embed(TokenVocab)}
 
-    From this table, each token is assigned a number, its ${tokenIdxStr}. And now we can enter this sequence of numbers into the model:${embed(ExampleTokenValues)}\n`;
+    从这个表中，每个 ${tokenStr} 都被分配了一个数字，即它的 ${tokenIdxStr}。现在我们可以将这个数字序列输入到模型中：${embed(ExampleTokenValues)}\n`;
     breakAfter();
 
     let t7 = afterTime(null, 1.5, 0.5);
@@ -129,8 +129,8 @@ and sort them in alphabetical order, i.e. to "ABBBCC".`;
 
     breakAfter();
 
-    let c5 = commentary(wt)`In the 3d view, each green cell represents a number being processed, and each blue cell is a weight. ${embed(GreenBlueCells)}
-    Each number in the sequence first gets turned into a 48 element vector (a size chosen for this particular model). This is called an _embedding_.`;
+    let c5 = commentary(wt)`在 3D 视图中，每个绿色单元格代表一个正在处理的数字_（注：即你的输入，根据不同输入每次不同）_，而每个蓝色单元格是一个权重（Weight）_（注：权重是在模型里固定的，即模型训练后，根据训练的数据，训练出来的值。你可以理解权重就像一个可以被雕刻折射率的透镜，在接受多次训练的蚀刻之后，参数的“折射率”就被固定了，当一束新光进来的时候，他就按照固定的折射率将光进行折射）_。${embed(GreenBlueCells)}
+    序列中的每个数字首先会被转换为一个包含 48 个元素的向量（这是为这个特定模型选择的大小）。这被称为 _嵌入层_（embedding）。`;
     breakAfter(c5);
 
     {
@@ -166,7 +166,7 @@ and sort them in alphabetical order, i.e. to "ABBBCC".`;
     }
 
     breakAfter();
-    commentary(wt)`The embedding is then passed through the model, going through a series of layers, called transformers, before reaching the bottom.`;
+    commentary(wt)`嵌入层（embedding）随后会通过模型，经过多层神经网络处理，而每一层神经网络，都用称为transformers的结构机型信息处理_（注：transfomer架构是深度学习中，特别用于大语言模型的架构。但在图像生成等模型中，有另外的架构如扩散Difussion模型。如果按照中文，我们可以将它叫做变换器，但是在大语言模型里面，，我们一般不将transfomer进行特定的翻译，一般用transfomer称呼。单层transfomer的结构后面有详细介绍）_，最终到达底部，这样我们的输入变成了大模型猜想的他要输出的语句中可能出现的那个词的概率。`;
     breakAfter();
 
     {
@@ -220,11 +220,9 @@ and sort them in alphabetical order, i.e. to "ABBBCC".`;
         }
     }
 
-    commentary(wt)`So what's the output? A prediction of the next token in the sequence. So at the 6th entry, we get probabilities that the next token is
-        going to be 'A', 'B', or 'C'.`
+    commentary(wt)`那么输出是什么？是序列中下一个 ${tokenStr} 的预测概率。因此，在第 6 个条目处，我们得到的概率是下一个 ${tokenStr} 是 'A'、'B' 或 'C'。`
 
-    commentary(wt)`In this case, the model is pretty sure it's going to be 'A'. Now, we can feed this prediction back into the top of the model, and repeat
-    the entire process.`;
+    commentary(wt)`在这种情况下，模型非常确定下一个 ${tokenStr} 会是 'A'。现在，我们可以将这个预测反馈到模型的顶部，并重复整个过程。`;
 
     breakAfter();
 }
