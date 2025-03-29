@@ -37,3 +37,8 @@ add a number of walkthroughs, showing things such as:
 
 1. Install dependencies: `yarn`
 1. Start the dev server: `yarn dev`
+## build镜像
+
+docker build -t llm-viz .
+
+docker run -d -p 5001:3000 llm-viz

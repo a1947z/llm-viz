@@ -2,7 +2,8 @@ import React from "react";
 
 export const Header: React.FC<{
     title?: React.ReactNode;
-}> = ({ title }) => {
+    children?: React.ReactNode; // 添加 children 属性
+}> = ({ title, children }) => {
     return (
         <div
             style={{
@@ -59,6 +60,7 @@ export const Header: React.FC<{
                     </div>
                 </div>
             </div>
+            {children && <div>{children}</div>} {/* 渲染 children */}
         </div>
     );
 };
